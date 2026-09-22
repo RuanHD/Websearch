@@ -50,8 +50,10 @@ public class WebSearchModel {
 }
 
     private void notifyAllObservers(String line) {
-        for (QueryObserver obs : observers) {
-            obs.onQuery(line);
+        for (ObserverFilterPair pair : observers) {
+            if (pair.filter.onMatch(line)) {
+                pair.observer.onQuery(line);
+            }
         }
-    }
+}
 }
