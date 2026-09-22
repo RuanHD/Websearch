@@ -13,6 +13,10 @@ public class WebSearchModel {
         void onQuery(String query);
     }
 
+    public interface QueryFilter {
+        boolean onMatch(String query);
+    }
+
     public WebSearchModel(File sourceFile) {
         this.sourceFile = sourceFile;
     }
