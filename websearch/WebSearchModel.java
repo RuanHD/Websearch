@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class WebSearchModel {
     private final File sourceFile;
-    private final List<QueryObserver> observers = new ArrayList<>();
+    private final List<ObserverFilterPair> observers = new ArrayList<>();
 
     public interface QueryObserver {
         void onQuery(String query);
@@ -16,6 +16,16 @@ public class WebSearchModel {
     public interface QueryFilter {
         boolean onMatch(String query);
     }
+    
+    private class ObserverFilterPair {
+    QueryFilter filter;
+    QueryObserver observer;
+
+    ObserverFilterPair(QueryFilter filter, QueryObserver observer) {
+        this.filter = filter;
+        this.observer = observer;
+    }
+}
 
     public WebSearchModel(File sourceFile) {
         this.sourceFile = sourceFile;
@@ -35,9 +45,9 @@ public class WebSearchModel {
         }
     }
 
-    public void addQueryObserver(QueryObserver queryObserver) {
-        observers.add(queryObserver);
-    }
+    public void addQueryObserver(QueryFilter filter, QueryObserver observer) {
+        observers.add(new ObserverFilterPair(filter, observer));
+}
 
     private void notifyAllObservers(String line) {
         for (QueryObserver obs : observers) {
