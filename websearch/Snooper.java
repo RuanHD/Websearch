@@ -7,11 +7,16 @@ public class Snooper {
     public Snooper(WebSearchModel model) {
         this.model = model;
 
-        model.addQueryObserver( new WebSearchModel.QueryObserver() {
-            @Override
-            public void onQuery(String query) {
-                System.out.println("Query: " + query);
-            }
-        });
+        // Observador 1: Palavra 'friend'
+        model.addQueryObserver(
+            query -> query.toLowerCase().contains("friend"),
+            query -> System.out.println("Oh Yes! " + query)
+        );
+
+        // Observador 2: Mais de 60 caracteres
+        model.addQueryObserver(
+            query -> query.length() > 60,
+            query -> System.out.println("So long " + query)
+        );
     }
 }
